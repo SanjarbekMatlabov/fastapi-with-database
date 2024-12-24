@@ -18,7 +18,7 @@ class Ticket(BaseModel) :
     price: int
     class_type: int
 
-class passanger(BaseModel):
+class Passenger(BaseModel):
     fullname: str
     passport_id: str 
     phone_number: int
