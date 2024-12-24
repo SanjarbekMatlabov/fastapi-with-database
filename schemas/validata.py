@@ -15,7 +15,7 @@ class Plane(BaseModel):
 class Ticket(BaseModel) :
     pasanger_id: int
     flight_id: int
-    price: int
+    price: float
     class_type: int
 
 class Passenger(BaseModel):

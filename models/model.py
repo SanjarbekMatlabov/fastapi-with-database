@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine,Column,Integer,String,DateTime
+from sqlalchemy import create_engine,Column,Integer,String,DateTime,ForeignKey,Float
 from sqlalchemy.orm import declarative_base,sessionmaker, relationship
 from sqlalchemy_utils import EmailType
 from dotenv import load_dotenv
@@ -17,7 +17,7 @@ class Flight(Base):
     __tablename__ = 'flights'
     id = Column(Integer, primary_key=True, index=True)
     flight_number = Column(String, index=True)
-    to_city = Column(str)
+    to_city = Column(String)
     plane_id = relationship("Plane",back_populates="flights")
     date_time = Column(DateTime)
 class Plane(Base):
@@ -30,8 +30,28 @@ class Plane(Base):
 class Passenger(Base):
     __tablename__ = 'passengers'
     id = Column(Integer, primary_key=True, index=True)
-    fullname = Column(str)
+    fullname = Column(String)
     passport_id = Column(str,index=True)
     birth_date = Column(DateTime)
     email = Column(EmailType)
     tickets = relationship("Ticket", back_populates="passenger_id")
+class Ticket(Base):
+    __tablename__ = 'tickets'
+    id = Column(Integer, primary_key=True, index=True)
+    passenger_id = Column(Integer, ForeignKey('passengers.id'))
+    flight_id = Column(Integer, ForeignKey('flights.id'))
+    price = Column(Float)
+    class_type = Column(String)
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    login = Column(String)
+    password = Column(String)
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer, primary_key=True, index=True)
+    ticket_id = Column(Integer, ForeignKey("tickets.id"))
+    amount = Column(Integer)
+
+Base.metadata.create_all(bind=engine)
