@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from datetime import datetime, date
 class Flight(BaseModel):
     flight_number: str
     from_city : str
@@ -22,8 +22,8 @@ class Passenger(BaseModel):
     fullname: str
     passport_id: str 
     phone_number: int
-    birth_date: data  
-    emain: EmailStr
+    birth_date: datetime  
+    email: str
 
 class Order(BaseModel):
     ticket_id:int 
