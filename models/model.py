@@ -8,9 +8,9 @@ user_db = os.getenv('USER_DB')
 pass_db = os.getenv('PASS_DB')
 name_db = os.getenv('NAME_DB')
 
-DATABASE_URL = 'postgresql://{user_db}:{pass_db}#5432@localhost/{name_db}'
-engine = create_engine()
-session = sessionmaker(autoslush=False,autocommit=False,bind=engine)
+DATABASE_URL = "sqlite:///./ticket.db"
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 class Flight(Base):
@@ -18,7 +18,7 @@ class Flight(Base):
     id = Column(Integer, primary_key=True, index=True)
     flight_number = Column(String, index=True)
     to_city = Column(String)
-    plane_id = relationship("Plane",back_populates="flights")
+    plane_id = relationship("planes",back_populates="id")
     date_time = Column(DateTime)
 class Plane(Base):
     __tablename__ = 'planes'
@@ -26,12 +26,12 @@ class Plane(Base):
     model = Column(String)
     spaces_bus = Column(Integer)
     spaces_eco = Column(Integer)
-    flights = relationship("Flight", back_populates="plane_id")
+    flights = relationship("flights", back_populates="plane_id")
 class Passenger(Base):
     __tablename__ = 'passengers'
     id = Column(Integer, primary_key=True, index=True)
     fullname = Column(String)
-    passport_id = Column(str,index=True)
+    passport_id = Column(String,index=True)
     birth_date = Column(DateTime)
     email = Column(EmailType)
     tickets = relationship("Ticket", back_populates="passenger_id")
